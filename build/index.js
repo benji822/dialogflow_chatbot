@@ -3,23 +3,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv").config();
 const axios_1 = __importDefault(require("axios"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const express_1 = __importDefault(require("express"));
-const API_KEY = "8c2230d";
+const fulfillment_1 = require("./fulfillment");
 const app = express_1.default();
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
 app.get("/", (req, res) => {
     res.send("Welcome to Movie API");
 });
+app.post("/weather", fulfillment_1.fulfillment);
 app.post("/get-movie-details", (req, res) => {
     const movieToSearch = req.body.queryResult &&
         req.body.queryResult.parameters &&
         req.body.queryResult.parameters.movie
         ? req.body.queryResult.parameters.movie
         : "Joker";
-    const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`);
+    const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${process.env.API_KEY}`);
     axios_1.default
         .get(reqUrl)
         .then(responseFromAPI => {

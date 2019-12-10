@@ -1,8 +1,8 @@
+require("dotenv").config();
 import axios from "axios";
 import bodyParser from "body-parser";
 import express, { Request, Response } from "express";
-
-const API_KEY = "8c2230d";
+import { fulfillment } from "./fulfillment";
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -13,6 +13,8 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Movie API");
 });
 
+app.post("/weather", fulfillment);
+
 app.post("/get-movie-details", (req: Request, res: Response) => {
   const movieToSearch: string =
     req.body.queryResult &&
@@ -21,7 +23,7 @@ app.post("/get-movie-details", (req: Request, res: Response) => {
       ? req.body.queryResult.parameters.movie
       : "Joker";
   const reqUrl = encodeURI(
-    `http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`
+    `http://www.omdbapi.com/?t=${movieToSearch}&apikey=${process.env.API_KEY}`
   );
 
   axios
