@@ -7,14 +7,14 @@ require("dotenv").config();
 const axios_1 = __importDefault(require("axios"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const express_1 = __importDefault(require("express"));
-const fulfillment_1 = require("./fulfillment");
+const weatherFulfillment_1 = require("./weatherFulfillment");
 const app = express_1.default();
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
 app.get("/", (req, res) => {
     res.send("Welcome to Movie API");
 });
-app.post("/weather", fulfillment_1.fulfillment);
+app.post("/weather", weatherFulfillment_1.fulfillment);
 app.post("/get-movie-details", (req, res) => {
     const movieToSearch = req.body.queryResult &&
         req.body.queryResult.parameters &&
@@ -27,7 +27,6 @@ app.post("/get-movie-details", (req, res) => {
         .then(responseFromAPI => {
         const { Title, Year, Director, Actors, Plot } = responseFromAPI.data;
         const dataToSend = `${Title} was released in the year ${Year}. It is directed by ${Director} and stars ${Actors}.\n Here some glimpse of the plot: ${Plot}`;
-        console.log(responseFromAPI.data);
         return res.json({
             fulfillmentText: dataToSend,
             facebook: {

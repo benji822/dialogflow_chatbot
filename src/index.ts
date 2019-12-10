@@ -2,7 +2,7 @@ require("dotenv").config();
 import axios from "axios";
 import bodyParser from "body-parser";
 import express, { Request, Response } from "express";
-import { fulfillment } from "./fulfillment";
+import { fulfillment } from "./weatherFulfillment";
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,7 +32,6 @@ app.post("/get-movie-details", (req: Request, res: Response) => {
       const { Title, Year, Director, Actors, Plot } = responseFromAPI.data;
       const dataToSend = `${Title} was released in the year ${Year}. It is directed by ${Director} and stars ${Actors}.\n Here some glimpse of the plot: ${Plot}`;
 
-      console.log(responseFromAPI.data);
       return res.json({
         fulfillmentText: dataToSend,
         facebook: {

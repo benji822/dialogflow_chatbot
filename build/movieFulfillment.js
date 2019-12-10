@@ -13,7 +13,7 @@ const dialogflow_fulfillment_1 = require("dialogflow-fulfillment");
 function fulfillment(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         const agent = new dialogflow_fulfillment_1.WebhookClient({ request, response });
-        console.log(request.body);
+        console.log(agent.webhook);
         // English handler functions and intent map
         function welcome(agent) {
             agent.add(`Welcome to my agent!`);
@@ -25,25 +25,7 @@ function fulfillment(request, response) {
         let enIntentMap = new Map(); // Map functions to English Dialogflow intent names
         enIntentMap.set("Default Welcome Intent", welcome);
         enIntentMap.set("Default Fallback Intent", fallback);
-        // French handler functions and intent map
-        function bienvenue(agent) {
-            agent.add(`Bienvenue à mon agent!`);
-        }
-        function secours(agent) {
-            agent.add(`Je n'ai pas compris`);
-            agent.add(`Pouvez-vous essayer encore?`);
-        }
-        let frIntentMap = new Map(); // Map functions to French Dialogflow intent names
-        frIntentMap.set("Default Welcome Intent", bienvenue);
-        frIntentMap.set("Default Fallback Intent", secours);
-        // Chose which intent map to use based on the language of the request
-        console.log(`Request locale: ${agent.locale}`);
-        if (agent.locale === "en") {
-            agent.handleRequest(enIntentMap);
-        }
-        else if (agent.locale === "fr") {
-            agent.handleRequest(frIntentMap);
-        }
+        agent.handleRequest(enIntentMap);
     });
 }
 exports.fulfillment = fulfillment;
